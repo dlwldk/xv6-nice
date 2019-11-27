@@ -1,0 +1,51 @@
+//컴퓨터전자시스템공학부 201702817 이지아
+//shell 명령어로 pid와 value값을 받는 것에서 error가 나 snice에서 직접 바꿔줌
+
+1. syscall.h
+ 이 파일에서 SYS_getnice와 SYS_setnice를 정의
+
+2. usys.S
+ getnice, setnice의 새로운 syscall 라이브러리 추가
+
+3. syscall.c
+ sys_getnice와 sys_setnice의 syscall 함수를 외부정의
+
+4. sysproc.c
+ pid값이 0보다작으면 -1을 return
+ sys_getnice에서 특정 pid의 user 함수 getnice를 호출
+ pid값이 0보다 작거나 value값이 0보다 작으면 -1을 return
+ sys_setnice에서 특정 pid의 user 함수 setnice를 호출
+
+5. proc.h
+ proc 구조체에 nice변수를 추가
+
+6. proc.c
+ count변수 1로 초기 선언을 해서 처음에는 모든 프로세서의 nice값을 20으로 초기화<-이부분은 setnice, getnice에서 구현
+ getnice함수에서
+ lock을 먼저 걸어준 뒤, pid 중 찾고자하는 pid와 같으면 lock을 풀고 그 nice값을 return
+ 만약 찾지 못하면 -1을 return
+ setnice함수에서
+ lock을 먼저 걸어준 뒤, value값이 0부터 40사이를 벗어나면 -1을 return 
+ 찾고자 하는 pid를 찾으면 해당 pid의 nice값에 value 대입
+
+7. defs.h
+ proc.c부분에 getnice, setnice함수 선언
+
+8. user.h
+ syscall 함수 프로토타입 getnice, setnice를 추가
+
+9. Makefile
+ 만들고자 하는 application을 추가(앞에 _필수적)
+ gnicepid, snicepidvalue 추가
+
+10. gnicepid
+ 해당 pid가 없거나 nice값이 정상값이 아니면 오류를 출력하고,
+ 정상적으로 작동된다면 현재 nice값을 출력
+
+11. snicepidvalue
+ 변경하고자 하는 nice값을 해당 pid의 nice값에 대입
+ 변경하고자 하는 nice값이 정상값이 아니면 오류 출력
+ 
+
+
+
