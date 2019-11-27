@@ -1,0 +1,21 @@
+# xv6-hw1
+운영체제 과제1
+• 목표:  nice 관련system call 구현 
+• syscall인터페이스 
+- int getnice(intpid) 
+- int setnice(int pid, int value
+
+• syscall동작특징 
+- getnice 함수는 지정된 pid proces의 현재 nice 값을 반환한다. 
+- setnice 함수는 지정된 pid proces의 nice 값을 설정한다. 
+- 각 프로세스에 처음 할당되는 nice 값(기본값)은 20이며, nice 값의 유효범위는 [0,40]. 
+
+• return값 
+- getnice: 성공 시, 해당 프로세스의 nice 값. 실패 시, -1 반환 (예: 해당 pid process가 없는 경우) 
+- setnice: 성공 시, 0을 반환. 실패 시, -1 반환 (예: 해당 pid가 없거나, 유효 범위를 넘 는 nice 값
+
+• 테스트프로그램작성방법 
+- 다음 기능을 갖는 테스트 프로그램을 각각 작성한다. 
+* gnicepid: 주어진pid의현재nice 값을출력한다. 
+* snicepidvalue:주어진pid의nice 값을주어진value로변경한다. 
+- 단, 해당pid가 없거나, 또는 주어진nice value가 정상 범위의 값이 아닌 경우 그상황에 알맞는 에러 메시지를 출력한다.
